@@ -25,7 +25,7 @@ class TestDefaultController(BaseTestCase):
             'Accept': 'application/json',
         }
         response = self.client.open(
-            '/3GPPManagement/ProvMnS/XXX/{class_nameid}'.format(class_name='class_name_example', id='id_example'),
+            '/3GPPManagement/ProvMnS/XXX/{class_name}={id}'.format(class_name='class_name_example', id='example'),
             method='DELETE',
             headers=headers)
         self.assert200(response,
@@ -36,7 +36,7 @@ class TestDefaultController(BaseTestCase):
 
         Reads one or multiple resources
         """
-        query_string = [('scope', {'key': openapi_server.Scope()}),
+        query_string = [('scope', {'key': Scope()}),
                         ('filter', 'filter_example'),
                         ('attributes', ['attributes_example']),
                         ('fields', ['fields_example'])]
@@ -44,7 +44,7 @@ class TestDefaultController(BaseTestCase):
             'Accept': 'application/json',
         }
         response = self.client.open(
-            '/3GPPManagement/ProvMnS/XXX/{class_nameid}'.format(class_name='class_name_example', id='id_example'),
+            '/3GPPManagement/ProvMnS/XXX/{class_name}={id}'.format(class_name='class_name_example', id='example'),
             method='GET',
             headers=headers,
             query_string=query_string)
@@ -57,13 +57,13 @@ class TestDefaultController(BaseTestCase):
 
         Patches one or multiple resources
         """
-        resource = openapi_server.Resource()
+        resource = Resource()
         headers = { 
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
         }
         response = self.client.open(
-            '/3GPPManagement/ProvMnS/XXX/{class_nameid}'.format(class_name='class_name_example', id='id_example'),
+            '/3GPPManagement/ProvMnS/XXX/{class_name}={id}'.format(class_name='class_name_example', id='example'),
             method='PATCH',
             headers=headers,
             data=json.dumps(resource),
@@ -76,13 +76,14 @@ class TestDefaultController(BaseTestCase):
 
         Replaces a complete single resource or creates it if it does not exist
         """
-        resource = null
+        # resource = null
+        resource = Resource()
         headers = { 
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         }
         response = self.client.open(
-            '/3GPPManagement/ProvMnS/XXX/{class_nameid}'.format(class_name='class_name_example', id='id_example'),
+            '/3GPPManagement/ProvMnS/XXX/{class_name}={id}'.format(class_name='class_name_example', id='example'),
             method='PUT',
             headers=headers,
             data=json.dumps(resource),

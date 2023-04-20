@@ -24,7 +24,7 @@ paths:
     delete:
       description: With HTTP DELETE one resource is deleted. The resources to be deleted
         is identified with the target URI.
-      operationId: class_nameid_delete
+      operationId: delete_moi
       parameters:
       - explode: false
         in: path
@@ -56,7 +56,7 @@ paths:
       description: With HTTP GET resources are read. The resources to be retrieved
         are identified with the target URI. The attributes and fields parameter of
         the query components allow to select the resource properties to be returned.
-      operationId: class_nameid_get
+      operationId: get_moi_attributes
       parameters:
       - explode: false
         in: path
@@ -147,7 +147,7 @@ paths:
       description: "With HTTP PATCH resources are created, updated or deleted. The\
         \ resources to be modified are identified with the target URI (base resource)\
         \ and the patch document included in the request message body."
-      operationId: class_nameid_patch
+      operationId: modify_moi_attributes
       parameters:
       - explode: false
         in: path
@@ -302,7 +302,7 @@ paths:
               x-callback-request: true
       description: With HTTP PUT a complete resource is replaced or created if it
         does not exist. The target resource is identified by the target URI.
-      operationId: class_nameid_put
+      operationId: create_moi
       parameters:
       - explode: false
         in: path
@@ -903,34 +903,11 @@ components:
         excessPacketDelayThresholds:
           description: Excess Packet Delay Threshold for NR MDT. See details in 3GPP
             TS 32.422 clause 4.1.1 and 4.1.2.
+          items:
+            $ref: '#/components/schemas/excessPacketDelayThresholds-Type'
           maxItems: 255
           minItems: 0
-          properties:
-            fiveQIValue:
-              type: integer
-            excessPacketDelayThresholdValue:
-              enum:
-              - 0.25ms
-              - 0.5ms
-              - 1ms
-              - 2ms
-              - 4ms
-              - 5ms
-              - 10ms
-              - 20ms
-              - 30ms
-              - 40ms
-              - 50ms
-              - 60ms
-              - 70ms
-              - 80ms
-              - 90ms
-              - 100ms
-              - 150ms
-              - 300ms
-              - 500ms
-              type: string
-          title: excessPacketDelayThresholds-Type
+          title: excessPacketDelayThresholds
           type: array
       title: TraceJob-Attr
       type: object
@@ -1319,36 +1296,6 @@ components:
           type: array
       title: listOfInterfaces-Type
       type: object
-    listOfNETypes-Type:
-      description: The Network Element types where Trace Session activation is needed.
-        See 3GPP TS 32.422 clause 5.4 for additional details.
-      items:
-        enum:
-        - MSC_SERVER
-        - SGSN
-        - MGW
-        - GGSN
-        - RNC
-        - BM_SC
-        - MME
-        - SGW
-        - PGW
-        - ENB
-        - EN_GNB
-        - GNB_CU_CP
-        - GNB_CU_UP
-        - GNB_DU
-        - AMF
-        - PCF
-        - SMF
-        - UPF
-        - AUSF
-        - SMSF
-        - HSS
-        - UDM
-        type: string
-      title: listOfNETypes-Type
-      type: array
     pLMNTarget-Type:
       description: "The PLMN for which sessions shall be selected in the Trace Session\
         \ in case of management based activation when several PLMNs are supported\
@@ -1677,12 +1624,6 @@ components:
           $ref: '#/components/schemas/Tai'
         type: array
       title: AreaScope
-    beamLevelMeasurement-Type:
-      description: Determines whether beam level measurements shall be included in
-        case of immediate MDT M1 measurement in NR. For additional details see 3GPP
-        TS 32.422 clause 5.10.40.
-      title: beamLevelMeasurement-Type
-      type: boolean
     collectionPeriodRRMLTE-Type:
       description: See details in 3GPP TS 32.422 clause 5.10.20.
       enum:
@@ -2021,20 +1962,6 @@ components:
       - INFINITY
       title: reportAmount-Type
       type: string
-    reportingTrigger-Type:
-      description: See details in 3GPP TS 32.422 clause 5.10.4.
-      items:
-        enum:
-        - PERIODICAL
-        - A2_FOR_LTE_NR
-        - 1F_FOR_UMTS
-        - 1I_FOR_UMTS_MCPS_TDD
-        - A2_TRIGGERED_PERIODIC_FOR_LTE_NR
-        - ALL_CONFIGURED_RRM_FOR_LTE_NR
-        - ALL_CONFIGURED_RRM_FOR_UMTS
-        type: string
-      title: reportingTrigger-Type
-      type: array
     reportInterval-Type:
       description: See details in 3GPP TS 32.422 clause 5.10.5.
       properties:
@@ -2108,53 +2035,6 @@ components:
       - EVENT_TRIGGERED
       title: reportType-Type
       type: string
-    sensorInformation-Type:
-      description: See details in 3GPP TS 32.422 clause 5.10.29.
-      items:
-        enum:
-        - BAROMETRIC_PRESSURE
-        - UE_SPEED
-        - UE_ORIENTATION
-        type: string
-      title: sensorInformation-Type
-      type: array
-    traceCollectionEntityId-Type:
-      description: See details in 3GPP TS 32.422 clause 5.10.11. Only TCE Id value
-        may be sent over the air to the UE being configured for Logged MDT.
-      title: traceCollectionEntityId-Type
-      type: integer
-    excessPacketDelayThresholds-Type:
-      description: Excess Packet Delay Threshold for NR MDT. See details in 3GPP TS
-        32.422 clause 4.1.1 and 4.1.2.
-      maxItems: 255
-      minItems: 0
-      properties:
-        fiveQIValue:
-          type: integer
-        excessPacketDelayThresholdValue:
-          enum:
-          - 0.25ms
-          - 0.5ms
-          - 1ms
-          - 2ms
-          - 4ms
-          - 5ms
-          - 10ms
-          - 20ms
-          - 30ms
-          - 40ms
-          - 50ms
-          - 60ms
-          - 70ms
-          - 80ms
-          - 90ms
-          - 100ms
-          - 150ms
-          - 300ms
-          - 500ms
-          type: string
-      title: excessPacketDelayThresholds-Type
-      type: array
     ManagementDataCollection-Single:
       allOf:
       - $ref: '#/components/schemas/Top'
@@ -12706,10 +12586,7 @@ components:
     FeasibilityCheckAndReservationJob_Single_allOf_attributes:
       properties:
         profile:
-          oneOf:
-          - $ref: '#/components/schemas/SliceProfile'
-          - $ref: '#/components/schemas/ServiceProfile'
-          title: profile
+          $ref: '#/components/schemas/profile'
         resourceReservation:
           description: An attribute represents MnS consumer's requirements for resource
             reservation.
@@ -12959,3 +12836,64 @@ components:
           $ref: '#/components/schemas/ThresholdHysteresis'
       title: ThresholdLevelInd_oneOf_1
       type: object
+    UtraCellId:
+      pattern: "^[A-Fa-f0-9]{7}$"
+      title: UtraCellId
+      type: string
+    EutraCellId:
+      pattern: "^[A-Fa-f0-9]{7}$"
+      title: EutraCellId
+      type: string
+    NrCellId:
+      pattern: "^[A-Fa-f0-9]{7}$"
+      title: NrCellId
+      type: string
+    ThresholdHysteresis:
+      properties:
+        high:
+          title: high
+          format: float
+        low:
+          title: low
+          format: float
+      required:
+      - high
+      title: ThresholdHysteresis
+      type: object
+    excessPacketDelayThresholds-Type:
+      description: Excess Packet Delay Threshold for NR MDT. See details in 3GPP TS
+        32.422 clause 4.1.1 and 4.1.2.
+      properties:
+        fiveQIValue:
+          title: fiveQIValue
+          type: integer
+        excessPacketDelayThresholdValue:
+          enum:
+          - 0.25ms
+          - 0.5ms
+          - 1ms
+          - 2ms
+          - 4ms
+          - 5ms
+          - 10ms
+          - 20ms
+          - 30ms
+          - 40ms
+          - 50ms
+          - 60ms
+          - 70ms
+          - 80ms
+          - 90ms
+          - 100ms
+          - 150ms
+          - 300ms
+          - 500ms
+          title: excessPacketDelayThresholdValue
+          type: string
+      title: excessPacketDelayThresholds-Type
+      type: object
+    profile:
+      oneOf:
+      - $ref: '#/components/schemas/SliceProfile'
+      - $ref: '#/components/schemas/ServiceProfile'
+      title: profile

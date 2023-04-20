@@ -17,6 +17,7 @@ from openapi_server.models.collection_period_rrmumts_type import CollectionPerio
 from openapi_server.models.event_list_for_event_triggered_measurement_type import EventListForEventTriggeredMeasurementType
 from openapi_server.models.event_threshold_l1_type import EventThresholdL1Type
 from openapi_server.models.event_threshold_type import EventThresholdType
+from openapi_server.models.excess_packet_delay_thresholds_type import ExcessPacketDelayThresholdsType
 from openapi_server.models.ip_addr import IpAddr
 from openapi_server.models.job_type_type import JobTypeType
 from openapi_server.models.list_of_interfaces_type import ListOfInterfacesType
@@ -52,6 +53,7 @@ from openapi_server.models.collection_period_rrmumts_type import CollectionPerio
 from openapi_server.models.event_list_for_event_triggered_measurement_type import EventListForEventTriggeredMeasurementType  # noqa: E501
 from openapi_server.models.event_threshold_l1_type import EventThresholdL1Type  # noqa: E501
 from openapi_server.models.event_threshold_type import EventThresholdType  # noqa: E501
+from openapi_server.models.excess_packet_delay_thresholds_type import ExcessPacketDelayThresholdsType  # noqa: E501
 from openapi_server.models.ip_addr import IpAddr  # noqa: E501
 from openapi_server.models.job_type_type import JobTypeType  # noqa: E501
 from openapi_server.models.list_of_interfaces_type import ListOfInterfacesType  # noqa: E501
@@ -175,7 +177,7 @@ class TraceJobAttr(Model):
         :param trace_collection_entity_id: The trace_collection_entity_id of this TraceJobAttr.  # noqa: E501
         :type trace_collection_entity_id: int
         :param excess_packet_delay_thresholds: The excess_packet_delay_thresholds of this TraceJobAttr.  # noqa: E501
-        :type excess_packet_delay_thresholds: object
+        :type excess_packet_delay_thresholds: List[ExcessPacketDelayThresholdsType]
         """
         self.openapi_types = {
             'job_type': JobTypeType,
@@ -223,7 +225,7 @@ class TraceJobAttr(Model):
             'report_type': ReportTypeType,
             'sensor_information': List[str],
             'trace_collection_entity_id': int,
-            'excess_packet_delay_thresholds': object
+            'excess_packet_delay_thresholds': List[ExcessPacketDelayThresholdsType]
         }
 
         self.attribute_map = {
@@ -1344,7 +1346,7 @@ class TraceJobAttr(Model):
         Excess Packet Delay Threshold for NR MDT. See details in 3GPP TS 32.422 clause 4.1.1 and 4.1.2.  # noqa: E501
 
         :return: The excess_packet_delay_thresholds of this TraceJobAttr.
-        :rtype: object
+        :rtype: List[ExcessPacketDelayThresholdsType]
         """
         return self._excess_packet_delay_thresholds
 
@@ -1355,7 +1357,11 @@ class TraceJobAttr(Model):
         Excess Packet Delay Threshold for NR MDT. See details in 3GPP TS 32.422 clause 4.1.1 and 4.1.2.  # noqa: E501
 
         :param excess_packet_delay_thresholds: The excess_packet_delay_thresholds of this TraceJobAttr.
-        :type excess_packet_delay_thresholds: object
+        :type excess_packet_delay_thresholds: List[ExcessPacketDelayThresholdsType]
         """
+        if excess_packet_delay_thresholds is not None and len(excess_packet_delay_thresholds) > 255:
+            raise ValueError("Invalid value for `excess_packet_delay_thresholds`, number of items must be less than or equal to `255`")  # noqa: E501
+        if excess_packet_delay_thresholds is not None and len(excess_packet_delay_thresholds) < 0:
+            raise ValueError("Invalid value for `excess_packet_delay_thresholds`, number of items must be greater than or equal to `0`")  # noqa: E501
 
         self._excess_packet_delay_thresholds = excess_packet_delay_thresholds

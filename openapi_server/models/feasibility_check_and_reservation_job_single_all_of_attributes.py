@@ -7,14 +7,14 @@ from typing import List, Dict  # noqa: F401
 
 from openapi_server.models.base_model_ import Model
 from openapi_server.models.feasibility_result import FeasibilityResult
-from openapi_server.models.one_of_slice_profile_service_profile import OneOfSliceProfileServiceProfile
 from openapi_server.models.process_monitor import ProcessMonitor
+from openapi_server.models.profile import Profile
 from openapi_server.models.resource_reservation_status import ResourceReservationStatus
 from openapi_server import util
 
 from openapi_server.models.feasibility_result import FeasibilityResult  # noqa: E501
-from openapi_server.models.one_of_slice_profile_service_profile import OneOfSliceProfileServiceProfile  # noqa: E501
 from openapi_server.models.process_monitor import ProcessMonitor  # noqa: E501
+from openapi_server.models.profile import Profile  # noqa: E501
 from openapi_server.models.resource_reservation_status import ResourceReservationStatus  # noqa: E501
 
 class FeasibilityCheckAndReservationJobSingleAllOfAttributes(Model):
@@ -27,7 +27,7 @@ class FeasibilityCheckAndReservationJobSingleAllOfAttributes(Model):
         """FeasibilityCheckAndReservationJobSingleAllOfAttributes - a model defined in OpenAPI
 
         :param profile: The profile of this FeasibilityCheckAndReservationJobSingleAllOfAttributes.  # noqa: E501
-        :type profile: OneOfSliceProfileServiceProfile
+        :type profile: Profile
         :param resource_reservation: The resource_reservation of this FeasibilityCheckAndReservationJobSingleAllOfAttributes.  # noqa: E501
         :type resource_reservation: bool
         :param requested_reservation_expiration: The requested_reservation_expiration of this FeasibilityCheckAndReservationJobSingleAllOfAttributes.  # noqa: E501
@@ -48,7 +48,7 @@ class FeasibilityCheckAndReservationJobSingleAllOfAttributes(Model):
         :type recommended_requirements: str
         """
         self.openapi_types = {
-            'profile': OneOfSliceProfileServiceProfile,
+            'profile': Profile,
             'resource_reservation': bool,
             'requested_reservation_expiration': str,
             'process_monitor': ProcessMonitor,
@@ -101,7 +101,7 @@ class FeasibilityCheckAndReservationJobSingleAllOfAttributes(Model):
 
 
         :return: The profile of this FeasibilityCheckAndReservationJobSingleAllOfAttributes.
-        :rtype: OneOfSliceProfileServiceProfile
+        :rtype: Profile
         """
         return self._profile
 
@@ -111,7 +111,7 @@ class FeasibilityCheckAndReservationJobSingleAllOfAttributes(Model):
 
 
         :param profile: The profile of this FeasibilityCheckAndReservationJobSingleAllOfAttributes.
-        :type profile: OneOfSliceProfileServiceProfile
+        :type profile: Profile
         """
 
         self._profile = profile

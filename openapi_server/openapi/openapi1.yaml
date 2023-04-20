@@ -1,0 +1,1069 @@
+openapi: 3.0.1
+info:
+  description: OAS 3.0.1 definition of the NS Provisioning MnS
+  title: NS Provisioning MnS
+  version: 17.6.0
+externalDocs:
+  description: 3GPP TS 28.531; Management and orchestration; Provisioning
+  url: http://www.3gpp.org/ftp/Specs/archive/28_series/28.531/
+servers:
+- url: "{MnSRoot}/NSProvMnS/{MnSVersion}"
+  variables:
+    MnSRoot:
+      default: http://example.com/3GPPManagement
+      description: See clause 4.4.2 of TS 32.158
+    MnSVersion:
+      default: XXX
+      description: Version number of the OpenAPI
+paths:
+  /ServiceProfile:
+    post:
+      description: With HTTP POST a complete Service Profile iscreated if it does
+        not exist.
+      operationId: allocate_nsi
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceProfile'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceProfile'
+          description: Success case ("201 Created"). This status code shall be returned
+            when the resource is created. The representation of the created resource
+            is returned in the response message body.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error case.
+      summary: "to allocate a network slice instance provided by the service provider,\
+        \ the network slice instance may be new or existing"
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /ServiceProfile/profileid={id}:
+    delete:
+      description: With HTTP DELETE one resource is deleted. The resources to be deleted
+        is identified with the target URI.
+      operationId: deallocate_nsi
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: "Success case (\"200 OK\"). This status code is returned, when\
+            \ the resource has been successfully deleted. The response body is empty."
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error case.
+      summary: Deallocates a Network Slice
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+    get:
+      description: With HTTP GET resources are read. The resources to be retrieved
+        are identified with the target URI. The attributes and fields parameter of
+        the query components allow to select the resource properties to be returned.
+      operationId: get_nsi
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: This parameter extends the set of targeted resources beyond the
+          base resource identified with the path component of the URI. No scoping
+          mechanism is specified in the present document.
+        explode: true
+        in: query
+        name: scope
+        required: false
+        schema:
+          $ref: '#/components/schemas/Scope'
+        style: form
+      - description: This parameter reduces the targeted set of resources by applying
+          a filter to the scoped set of resource representations. Only resource representations
+          for which the filter construct evaluates to "true" are targeted. No filter
+          language is specified in the present document.
+        explode: true
+        in: query
+        name: filter
+        required: false
+        schema:
+          $ref: '#/components/schemas/Filter'
+        style: form
+      - description: This parameter specifies the attributes of the scoped resources
+          that are returned.
+        explode: false
+        in: query
+        name: attributes
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: This parameter specifies the attribute field of the scoped resources
+          that are returned.
+        explode: false
+        in: query
+        name: fields
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceProfile'
+          description: "Success case (\"200 OK\"). The resources identified in the\
+            \ request for retrieval are returned in the response message body. In\
+            \ case the attributes or fields query parameters are used, only the selected\
+            \ attributes or sub-attributes are returned. The response message body\
+            \ is constructed according to the hierarchical response construction method\
+            \ (TS 32.158 [15])."
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error case.
+      summary: Reads Service Profile information
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+components:
+  schemas:
+    ScopeType:
+      enum:
+      - BASE_ONLY
+      - BASE_NTH_LEVEL
+      - BASE_SUBTREE
+      - BASE_ALL
+      title: ScopeType
+      type: string
+    Operation:
+      enum:
+      - add
+      - remove
+      - replace
+      type: string
+    Insert:
+      enum:
+      - before
+      - after
+      type: string
+    Scope:
+      properties:
+        scopeType:
+          $ref: '#/components/schemas/ScopeType'
+        scopeLevel:
+          type: integer
+      type: object
+    ServiceProfile:
+      example:
+        synchronicity:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          accuracy: 7.386282
+          availability: null
+        maxNumberofPDUSessions:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          nOofPDUSessions: 4
+        survivalTime: 1.1730742509559433
+        reliability: 4.965218492984954
+        dLThptPerSlice:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          guaThpt: 9.301444
+          maxThpt: 3.6160767
+        uESpeed: 6
+        maxDLDataVolume: 5.025004791520295
+        availability: 2.3021358869347655
+        energyEfficiency:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          performance: null
+        sliceSimultaneousUse: null
+        dLMaxPktSize:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          maxsize: 2
+        userMgmtOpen:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          support: null
+        sst: 143
+        uLLatency: 5.962133916683182
+        positioning:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          predictionfrequency: null
+          accuracy: 1.2315135
+          availability:
+          - CIDE-CID
+          - CIDE-CID
+        nBIoT:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          support: null
+        dLThptPerUE:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          guaThpt: 9.301444
+          maxThpt: 3.6160767
+        uEMobilityLevel: null
+        uLThptPerUE:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          guaThpt: 9.301444
+          maxThpt: 3.6160767
+        serviceProfileId: serviceProfileId
+        delayTolerance:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          support: null
+        v2XCommModels:
+          v2XMode: null
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+        radioSpectrum:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          nROperatingBands: nROperatingBands
+        networkSliceSharingIndicator: null
+        termDensity:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          density: 1
+        maxNumberofUEs: 6.027456183070403
+        uLDeterministicComm:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          periodicityList:
+          - 7
+          - 7
+          availability: null
+        dLDeterministicComm:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          periodicityList:
+          - 7
+          - 7
+          availability: null
+        dLLatency: 1.4658129805029452
+        jitter: 7
+        n6Protection:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          secFuncList:
+          - secRules:
+            - secRules
+            - secRules
+            secFunId: secFunId
+            secFunType: secFunType
+          - secRules:
+            - secRules
+            - secRules
+            secFunId: secFunId
+            secFunType: secFunType
+        uLMaxPktSize:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          maxsize: 2
+        kPIMonitoring:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          kPIList:
+          - kPIList
+          - kPIList
+        maxULDataVolume: 9.965781217890562
+        plmnInfoList:
+        - snssai:
+            sd: sd
+            sst: 20
+          plmnId:
+            mnc: mnc
+            mcc: mcc
+        - snssai:
+            sd: sd
+            sst: 20
+          plmnId:
+            mnc: mnc
+            mcc: mcc
+        nssaaSupport:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          support: null
+        uLThptPerSlice:
+          servAttrCom:
+            tagging:
+            - PERFORMANCE
+            - PERFORMANCE
+            exposure: null
+            category: null
+          guaThpt: 9.301444
+          maxThpt: 3.6160767
+        activityFactor: 1.4894159
+        coverageArea: coverageArea
+      properties:
+        serviceProfileId:
+          title: serviceProfileId
+          type: string
+        plmnInfoList:
+          items:
+            $ref: '#/components/schemas/PlmnInfo'
+          title: plmnInfoList
+          type: array
+        maxNumberofUEs:
+          title: maxNumberofUEs
+          type: number
+        dLLatency:
+          title: dLLatency
+          type: number
+        uLLatency:
+          title: uLLatency
+          type: number
+        uEMobilityLevel:
+          $ref: '#/components/schemas/MobilityLevel'
+        sst:
+          maximum: 255
+          title: Sst
+          type: integer
+        networkSliceSharingIndicator:
+          $ref: '#/components/schemas/NetworkSliceSharingIndicator'
+        availability:
+          title: availability
+          type: number
+        delayTolerance:
+          $ref: '#/components/schemas/DelayTolerance'
+        dLDeterministicComm:
+          $ref: '#/components/schemas/DeterministicComm'
+        uLDeterministicComm:
+          $ref: '#/components/schemas/DeterministicComm'
+        dLThptPerSlice:
+          $ref: '#/components/schemas/XLThpt'
+        dLThptPerUE:
+          $ref: '#/components/schemas/XLThpt'
+        uLThptPerSlice:
+          $ref: '#/components/schemas/XLThpt'
+        uLThptPerUE:
+          $ref: '#/components/schemas/XLThpt'
+        dLMaxPktSize:
+          $ref: '#/components/schemas/MaxPktSize'
+        uLMaxPktSize:
+          $ref: '#/components/schemas/MaxPktSize'
+        maxNumberofPDUSessions:
+          $ref: '#/components/schemas/MaxNumberofPDUSessions'
+        kPIMonitoring:
+          $ref: '#/components/schemas/KPIMonitoring'
+        nBIoT:
+          $ref: '#/components/schemas/NBIoT'
+        radioSpectrum:
+          $ref: '#/components/schemas/RadioSpectrum'
+        synchronicity:
+          $ref: '#/components/schemas/Synchronicity'
+        positioning:
+          $ref: '#/components/schemas/Positioning'
+        userMgmtOpen:
+          $ref: '#/components/schemas/UserMgmtOpen'
+        v2XCommModels:
+          $ref: '#/components/schemas/V2XCommModels'
+        coverageArea:
+          title: coverageArea
+          type: string
+        termDensity:
+          $ref: '#/components/schemas/TermDensity'
+        activityFactor:
+          format: float
+          title: Float
+          type: number
+        uESpeed:
+          title: uESpeed
+          type: integer
+        jitter:
+          title: jitter
+          type: integer
+        survivalTime:
+          title: survivalTime
+          type: number
+        reliability:
+          title: reliability
+          type: number
+        maxDLDataVolume:
+          title: maxDLDataVolume
+          type: number
+        maxULDataVolume:
+          title: maxULDataVolume
+          type: number
+        sliceSimultaneousUse:
+          $ref: '#/components/schemas/SliceSimultaneousUse'
+        energyEfficiency:
+          $ref: '#/components/schemas/EnergyEfficiency'
+        nssaaSupport:
+          $ref: '#/components/schemas/NSSAASupport'
+        n6Protection:
+          $ref: '#/components/schemas/N6Protection'
+      title: ServiceProfile
+      type: object
+    MobilityLevel:
+      enum:
+      - STATIONARY
+      - NOMADIC
+      - RESTRICTED MOBILITY
+      - FULLY MOBILITY
+      title: MobilityLevel
+      type: string
+    NetworkSliceSharingIndicator:
+      enum:
+      - SHARED
+      - NON-SHARED
+      title: NetworkSliceSharingIndicator
+      type: string
+    DelayTolerance:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        support: null
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        support:
+          $ref: '#/components/schemas/Support'
+      title: DelayTolerance
+      type: object
+    ServAttrCom:
+      example:
+        tagging:
+        - PERFORMANCE
+        - PERFORMANCE
+        exposure: null
+        category: null
+      properties:
+        category:
+          $ref: '#/components/schemas/Category'
+        tagging:
+          items:
+            enum:
+            - PERFORMANCE
+            - FUNCTION
+            - OPERATION
+            type: string
+          title: Tagging
+          type: array
+        exposure:
+          $ref: '#/components/schemas/Exposure'
+      title: ServAttrCom
+      type: object
+    Category:
+      enum:
+      - CHARACTER
+      - SCALABILITY
+      title: Category
+      type: string
+    Tagging:
+      items:
+        enum:
+        - PERFORMANCE
+        - FUNCTION
+        - OPERATION
+        type: string
+      title: Tagging
+      type: array
+    Exposure:
+      enum:
+      - API
+      - KPI
+      title: Exposure
+      type: string
+    Support:
+      enum:
+      - NOT SUPPORTED
+      - SUPPORTED
+      title: Support
+      type: string
+    DeterministicComm:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        periodicityList:
+        - 7
+        - 7
+        availability: null
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        availability:
+          $ref: '#/components/schemas/Support'
+        periodicityList:
+          items:
+            type: integer
+          title: periodicityList
+          type: array
+      title: DeterministicComm
+      type: object
+    XLThpt:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        guaThpt: 9.301444
+        maxThpt: 3.6160767
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        guaThpt:
+          format: float
+          title: Float
+          type: number
+        maxThpt:
+          format: float
+          title: Float
+          type: number
+      title: XLThpt
+      type: object
+    Float:
+      format: float
+      title: Float
+      type: number
+    MaxPktSize:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        maxsize: 2
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        maxsize:
+          title: maxsize
+          type: integer
+      title: MaxPktSize
+      type: object
+    MaxNumberofPDUSessions:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        nOofPDUSessions: 4
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        nOofPDUSessions:
+          title: nOofPDUSessions
+          type: integer
+      title: MaxNumberofPDUSessions
+      type: object
+    KPIMonitoring:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        kPIList:
+        - kPIList
+        - kPIList
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        kPIList:
+          items:
+            type: string
+          title: kPIList
+          type: array
+      title: KPIMonitoring
+      type: object
+    NBIoT:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        support: null
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        support:
+          $ref: '#/components/schemas/Support'
+      title: NBIoT
+      type: object
+    RadioSpectrum:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        nROperatingBands: nROperatingBands
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        nROperatingBands:
+          title: nROperatingBands
+          type: string
+      title: RadioSpectrum
+      type: object
+    Synchronicity:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        accuracy: 7.386282
+        availability: null
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        availability:
+          $ref: '#/components/schemas/SynAvailability'
+        accuracy:
+          format: float
+          title: Float
+          type: number
+      title: Synchronicity
+      type: object
+    SynAvailability:
+      enum:
+      - NOT SUPPORTED
+      - BETWEEN BS AND UE
+      - BETWEEN BS AND UE & UE AND UE
+      title: SynAvailability
+      type: string
+    Positioning:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        predictionfrequency: null
+        accuracy: 1.2315135
+        availability:
+        - CIDE-CID
+        - CIDE-CID
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        availability:
+          items:
+            enum:
+            - CIDE-CID
+            - OTDOA
+            - RF FINGERPRINTING
+            - AECID
+            - HYBRID POSITIONING
+            - NET-RTK
+            type: string
+          title: PositioningAvailability
+          type: array
+        predictionfrequency:
+          $ref: '#/components/schemas/Predictionfrequency'
+        accuracy:
+          format: float
+          title: Float
+          type: number
+      title: Positioning
+      type: object
+    PositioningAvailability:
+      items:
+        enum:
+        - CIDE-CID
+        - OTDOA
+        - RF FINGERPRINTING
+        - AECID
+        - HYBRID POSITIONING
+        - NET-RTK
+        type: string
+      title: PositioningAvailability
+      type: array
+    Predictionfrequency:
+      enum:
+      - PERSEC
+      - PERMIN
+      - PERHOUR
+      title: Predictionfrequency
+      type: string
+    UserMgmtOpen:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        support: null
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        support:
+          $ref: '#/components/schemas/Support'
+      title: UserMgmtOpen
+      type: object
+    V2XCommModels:
+      example:
+        v2XMode: null
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        v2XMode:
+          $ref: '#/components/schemas/Support'
+      title: V2XCommModels
+      type: object
+    TermDensity:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        density: 1
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        density:
+          title: density
+          type: integer
+      title: TermDensity
+      type: object
+    SliceSimultaneousUse:
+      enum:
+      - ZERO
+      - ONE
+      - TWO
+      - THREE
+      - FOUR
+      title: SliceSimultaneousUse
+      type: string
+    EnergyEfficiency:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        performance: null
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        performance:
+          $ref: '#/components/schemas/EEPerfReq'
+      title: EnergyEfficiency
+      type: object
+    EEPerfReq:
+      oneOf:
+      - $ref: '#/components/schemas/EmbbEEPerfReq'
+      - $ref: '#/components/schemas/UrllcEEPerfReq'
+      - $ref: '#/components/schemas/MIoTEEPerfReq'
+      title: EEPerfReq
+    EmbbEEPerfReq:
+      properties:
+        kpiType:
+          enum:
+          - NUMOFBITS
+          - NUMOFBITS_RANBASED
+          title: kpiType
+          type: string
+        req:
+          title: req
+          type: number
+      title: EmbbEEPerfReq
+      type: object
+    UrllcEEPerfReq:
+      properties:
+        kpiType:
+          enum:
+          - INVOFLATENCY
+          - NUMOFBITS_MULTIPLIED_INVOFLATENCY
+          title: kpiType
+          type: string
+        req:
+          title: req
+          type: number
+      title: UrllcEEPerfReq
+      type: object
+    MIoTEEPerfReq:
+      properties:
+        kpiType:
+          enum:
+          - MAXREGSUBS
+          - MEANACTIVEUES
+          title: kpiType
+          type: string
+        req:
+          title: req
+          type: number
+      title: MIoTEEPerfReq
+      type: object
+    NSSAASupport:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        support: null
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        support:
+          $ref: '#/components/schemas/Support'
+      title: NSSAASupport
+      type: object
+    N6Protection:
+      example:
+        servAttrCom:
+          tagging:
+          - PERFORMANCE
+          - PERFORMANCE
+          exposure: null
+          category: null
+        secFuncList:
+        - secRules:
+          - secRules
+          - secRules
+          secFunId: secFunId
+          secFunType: secFunType
+        - secRules:
+          - secRules
+          - secRules
+          secFunId: secFunId
+          secFunType: secFunType
+      properties:
+        servAttrCom:
+          $ref: '#/components/schemas/ServAttrCom'
+        secFuncList:
+          items:
+            $ref: '#/components/schemas/SecFunc'
+          title: secFuncList
+          type: array
+      title: N6Protection
+      type: object
+    SecFunc:
+      example:
+        secRules:
+        - secRules
+        - secRules
+        secFunId: secFunId
+        secFunType: secFunType
+      properties:
+        secFunId:
+          title: secFunId
+          type: string
+        secFunType:
+          title: secFunType
+          type: string
+        secRules:
+          items:
+            type: string
+          title: secRules
+          type: array
+      title: SecFunc
+      type: object
+    ErrorResponse:
+      description: Default schema for the response message body in case the request
+        is not successful.
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorResponse_error'
+      title: ErrorResponse
+      type: object
+    Filter:
+      description: The filter format shall be compliant to XPath 1.0.
+      type: string
+    PlmnInfoList:
+      items:
+        $ref: '#/components/schemas/PlmnInfo'
+      title: plmnInfoList
+      type: array
+    PlmnInfo:
+      example:
+        snssai:
+          sd: sd
+          sst: 20
+        plmnId:
+          mnc: mnc
+          mcc: mcc
+      properties:
+        plmnId:
+          $ref: '#/components/schemas/PlmnId'
+        snssai:
+          $ref: '#/components/schemas/Snssai'
+      title: PlmnInfo
+      type: object
+    PlmnId:
+      example:
+        mnc: mnc
+        mcc: mcc
+      properties:
+        mcc:
+          pattern: "^[0-9]{3}$"
+          title: Mcc
+          type: string
+        mnc:
+          pattern: "[0-9]{3}|[0-9]{2}"
+          title: Mnc
+          type: string
+      title: PlmnId
+      type: object
+    Mnc:
+      pattern: "[0-9]{3}|[0-9]{2}"
+      title: Mnc
+      type: string
+    Snssai:
+      example:
+        sd: sd
+        sst: 20
+      properties:
+        sst:
+          maximum: 255
+          title: Sst
+          type: integer
+        sd:
+          title: sd
+          type: string
+      title: Snssai
+      type: object
+    Sst:
+      maximum: 255
+      title: Sst
+      type: integer
+    Mcc:
+      pattern: "^[0-9]{3}$"
+      title: Mcc
+      type: string
+    ErrorResponse_error:
+      properties:
+        errorInfo:
+          title: errorInfo
+          type: string
+      title: ErrorResponse_error
+      type: object

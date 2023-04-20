@@ -6,13 +6,9 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from openapi_server.models.base_model_ import Model
-from openapi_server.models.eutra_cell_id import EutraCellId
-from openapi_server.models.nr_cell_id import NrCellId
 from openapi_server.models.tai import Tai
 from openapi_server import util
 
-from openapi_server.models.eutra_cell_id import EutraCellId  # noqa: E501
-from openapi_server.models.nr_cell_id import NrCellId  # noqa: E501
 from openapi_server.models.tai import Tai  # noqa: E501
 
 class AreaScope(Model):
