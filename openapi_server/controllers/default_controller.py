@@ -187,4 +187,75 @@ def get_nsi(id, scope=None, filter=None, attributes=None, fields=None):  # noqa:
 
     return make_response(serviceProfile.data,200)
 
+def allocate_nssi(slice_profile):  # noqa: E501
+    """to allocate a network slice subnet instance provided by the service provider, the network slice subnet instance may be new or existing
 
+    With HTTP POST a complete Slice Profile is created if it does not exist. # noqa: E501
+
+    :param slice_profile:
+    :type slice_profile: dict | bytes
+
+    :rtype: Union[SliceProfile, Tuple[SliceProfile, int], Tuple[SliceProfile, int, Dict[str, str]]
+    """
+
+    if connexion.request.is_json:
+        slice_profile = SliceProfile.from_dict(connexion.request.get_json())  # noqa: E501
+
+    json_object = connexion.request.get_json()
+
+    identifier=uuid.uuid1()
+
+    sliceProfileHeper.create_service_profile(identifier,json.dumps(json_object))
+
+    sliceProfile.slice_profile_id(identifier)
+
+    return sliceProfile
+
+
+
+def deallocate_nssi(slice_profile_id):  # noqa: E501
+    """Deallocates a Network Slice Subnet
+
+    With HTTP DELETE one resource is deleted. The resources to be deleted is identified with the target URI. # noqa: E501
+
+    :param slice_profile_id:
+    :type slice_profile_id: str
+
+    :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
+    """
+
+    try:
+        SliceProfileHelper.delete_resource(slice_profile_id)
+    except ValueError:
+        response=ErrorResponse(ErrorResponseError('NOT_FOUND: Cannot find service profile.'))
+        return make_response(jsonify(response),404)
+
+    return
+
+
+def get_nssi(slice_profile_id, scope=None, filter=None, attributes=None, fields=None):  # noqa: E501
+    """Reads Slice Profile information
+
+    With HTTP GET resources are read. The resources to be retrieved are identified with the target URI. The attributes and fields parameter of the query components allow to select the resource properties to be returned. # noqa: E501
+
+    :param slice_profile_id:
+    :type slice_profile_id: str
+    :param scope: This parameter extends the set of targeted resources beyond the base resource identified with the path component of the URI. No scoping mechanism is specified in the present document.
+    :type scope: dict | bytes
+    :param filter: This parameter reduces the targeted set of resources by applying a filter to the scoped set of resource representations. Only resource representations for which the filter construct evaluates to \&quot;true\&quot; are targeted. No filter language is specified in the present document.
+    :type filter: str
+    :param attributes: This parameter specifies the attributes of the scoped resources that are returned.
+    :type attributes: List[str]
+    :param fields: This parameter specifies the attribute field of the scoped resources that are returned.
+    :type fields: List[str]
+
+    :rtype: Union[SliceProfile, Tuple[SliceProfile, int], Tuple[SliceProfile, int, Dict[str, str]]
+    """
+
+    try:
+        sliceProfile=sliceProfileHelper.get_resource(slice_profile_id)
+    except ValueError:
+        response=ErrorResponse(ErrorResponseError('NOT_FOUND: Cannot find resource.'))
+        return make_response(jsonify(response),404)
+
+    return make_response(sliceProfile.data,200)
